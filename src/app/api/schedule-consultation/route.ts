@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       email: email || 'no-email@provided.com',
       phone: phone || '',
       subject: `Free Consultation Request: ${serviceType || 'Seasonal Lighting'}`,
-      message: message || `Preferred Date: ${preferredDate}, Preferred Time: ${preferredTime}, Address: ${address}`,
+      message: message || `Address: ${address || 'Not provided'}`,
       type: 'Consultation Request',
       extraData: {
         address,
