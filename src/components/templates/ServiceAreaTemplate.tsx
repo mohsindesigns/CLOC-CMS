@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import CallToAction from "../CallToAction";
+import CallToAction, { ConsultationModal } from "../CallToAction";
 import VanMapSection from "../VanMapSection";
 import {
   FaArrowRight,
@@ -80,6 +80,7 @@ export default function ServiceAreaTemplate({ pageData }: any) {
   const [mounted, setMounted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -112,11 +113,11 @@ export default function ServiceAreaTemplate({ pageData }: any) {
   const handleCtaClick = (link?: string) => {
     const target = link || heroCtaLink;
     if (!target || target === "#quote" || target === "quote" || target === "modal" || target === "#") {
-      (window.location.href = "/contact");
+      setIsModalOpen(true);
     } else if (target.startsWith("tel:") || target.startsWith("mailto:") || target.startsWith("http") || target.startsWith("/")) {
       window.location.href = target;
     } else {
-      (window.location.href = "/contact");
+      setIsModalOpen(true);
     }
   };
 
@@ -315,7 +316,7 @@ export default function ServiceAreaTemplate({ pageData }: any) {
                 <span className="text-xs sm:text-sm md:text-base text-gray-700">
                   Don't see your area?{" "}
                   <button
-                    onClick={() => (window.location.href = "/contact")}
+                    onClick={() => setIsModalOpen(true)}
                     className="text-amber-700 font-bold hover:underline cursor-pointer"
                   >
                     Contact us
@@ -332,10 +333,18 @@ export default function ServiceAreaTemplate({ pageData }: any) {
         {/* ========================================================================= */}
         <section className="sm:-mt-8 lg:-mt-12 sm:p-6 lg:p-12 bg-white">
           <CallToAction
-            customData={serviceAreaData.ctaSection || serviceAreaData.bottomCta} 
+            customData={serviceAreaData.ctaSection || serviceAreaData.bottomCta}
+            onOpenConsultation={() => setIsModalOpen(true)}
           />
         </section>
 
+        {/* ========================================================================= */}
+        {/* 5. CONSULTATION MODAL */}
+        {/* ========================================================================= */}
+        <ConsultationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
 
         {/* CSS KEYFRAMES */}
         <style jsx global>{`
